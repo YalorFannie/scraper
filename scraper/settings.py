@@ -66,11 +66,21 @@ SPIDER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'scraper.pipelines.ScraperPipeline': 300,
-   'scraper.pipelines.MongoPipeline' : 200,
+   'scraper.pipelines.MongoPipeline' : 300,
+   'scraper.pipelines.MySqlPipeline' : 300,
 }
 
+# start MongoDB database configure setting
 MONGO_URI='mongodb://localhost:27017'
 MONGODB_DBNAME='cochindb'
+# end of MongoDB database configure setting
+
+# start MySQL database configure setting
+MYSQL_HOST = 'localhost'
+MYSQL_DBNAME = 'cochindb'
+MYSQL_USER = 'root'
+MYSQL_PASSWD = 'newpass'
+# end of MySQL database configure setting
 
 
 # Enable and configure the AutoThrottle extension (disabled by default)
