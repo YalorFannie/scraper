@@ -25,10 +25,15 @@ class CochinportSpider(scrapy.Spider):
         # table: expected vessels
         vellels_rows = Selector(text=table_expected_vessels).xpath('//tr')
 
+        th = Selector(text=table_vessel_position).xpath('//th/text()').extract_first()
+        # print('thead is: ', thead)
+        today = re.search(r'\d{2}.\d{2}.\d{4}', th).group()
+
         # extrated table data of each row
         for row in vellels_rows[2:]:
             item = VesselsItem()
 
+            item['today'] = today
             item['date'] = row.xpath('td[1]/text()').extract_first()
             item['ata_eta'] = row.xpath('td[2]/text()').extract_first()
             item['vessel'] = row.xpath('td[3]/text()').extract_first()
@@ -38,6 +43,7 @@ class CochinportSpider(scrapy.Spider):
             item['agent'] = row.xpath('td[7]/text()').extract_first()
 
             yield item
+
 
 
         # table: shipping movement
@@ -80,7 +86,6 @@ class CochinportSpider(scrapy.Spider):
         pattern = r'\d{2}.\d{2}.\d{4}'
         today = re.search(pattern, thead).group()
         # print('today is: ', today)
-
 
         for row in position_rows[2:]:
             item = PositionItem()

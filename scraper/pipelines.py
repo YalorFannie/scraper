@@ -104,8 +104,8 @@ class MySqlPipeline(object):
         params = ''
 
         if isinstance(item, VesselsItem):
-            sql = 'insert into expected_vessels(date, ata_eta, vessel, cargo, quantity, ie, agent) values (%s, %s, %s, %s, %s, %s, %s)'
-            params = (item['date'], item['ata_eta'], item['vessel'], item['cargo'], item['quantity'], item['ie'], item['agent'])
+            sql = 'insert into expected_vessels(today, date, ata_eta, vessel, cargo, quantity, ie, agent) values (%s, %s, %s, %s, %s, %s, %s, %s)'
+            params = (item['today'], item['date'], item['ata_eta'], item['vessel'], item['cargo'], item['quantity'], item['ie'], item['agent'])
 
         elif isinstance(item, MovementItem):
             sql = 'insert into shipping_movement(date, state, vessel_name, berth_allotted, pilot_boarding_time) values (%s, %s, %s, %s, %s)'

@@ -14,6 +14,7 @@ class ScraperItem(scrapy.Item):
     pass
 
 class VesselsItem(scrapy.Item):
+	today = scrapy.Field()
 	date = scrapy.Field()
 	ata_eta = scrapy.Field()
 	vessel = scrapy.Field()
