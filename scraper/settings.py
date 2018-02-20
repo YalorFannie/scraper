@@ -66,8 +66,9 @@ SPIDER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'scraper.pipelines.ScraperPipeline': 300,
-   'scraper.pipelines.MongoPipeline' : 300,
-   'scraper.pipelines.MySqlPipeline' : 300,
+   'scraper.pipelines.JsonWritterPipeline': 400,
+   'scraper.pipelines.MongoPipeline' : 400,
+   'scraper.pipelines.MySqlPipeline' : 400,
 }
 
 # start MongoDB database configure setting

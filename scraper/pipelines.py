@@ -11,19 +11,42 @@ import pymysql
 from scraper.items import VesselsItem, MovementItem, PositionItem
 from scraper import settings
 from scrapy import log
+from scrapy.exceptions import DropItem
 
+# drop empty item
 class ScraperPipeline(object):
-	def __init__(self):
-		self.file = codecs.open('expected_vessels.txt', 'w', encoding='utf-8')
+    def process_item(self, item, spider):
+        if isinstance(item, VesselsItem):
+            return item
 
-	def process_item(self, item, spider):
-		line = json.dumps(dict(item), ensure_ascii=False) + "\n"
-		self.file.write(line)
-		return item
+        if isinstance(item, MovementItem):
+            if item['vessel_name'] == 'NIL':
+                raise DropItem('empty data: %s' % item)
+            else:
+                return item
 
-	def spider_closed(self, spider):
-		self.file.close()
+        elif isinstance(item, PositionItem):
+            if item['vessel'] == 'NO VESSEL':
+                raise DropItem('empty data: %s' % item)
+            else:
+                return item
 
+
+# write item to json file
+class JsonWritterPipeline(object):
+    def __init__(self):
+        self.file = codecs.open('scraped_data.txt', 'w', encoding='utf-8')
+
+    def process_item(self, item, spider):
+        line = json.dumps(dict(item), ensure_ascii=False) + "\n"
+        self.file.write(line)
+        return item
+
+    def spider_closed(self, spider):
+        self.file.close()
+
+
+# write item to MongoDB
 class MongoPipeline(object):
 
     # collection_name = 'expected_vessels'
@@ -64,7 +87,7 @@ class MongoPipeline(object):
         return item
 
 
-
+# write item to mysql database
 class MySqlPipeline(object):
     def __init__(self):
         self.connect = pymysql.connect(
